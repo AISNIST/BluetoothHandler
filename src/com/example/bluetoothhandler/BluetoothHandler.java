@@ -38,9 +38,11 @@ public class BluetoothHandler extends Activity {
 	//bluetooth adapter
 	private BluetoothAdapter btAdapter = null;
 	private BluetoothSocket btSocket = null;
+
 	private ConnectedThread mConnectedThread;
 	private final int RECIEVE_MESSAGE =1;
- 
+
+	private String recievedMessage = " ";
 
 	//MAC address to connect to 
 	private static String address;
@@ -49,67 +51,67 @@ public class BluetoothHandler extends Activity {
 	 * called by the android OS that will safely dispose of the activity
 	 * */
 	public void dispose() {
-		
+
 		//killz the adapter
 		btAdapter = null;
 		try {
-		    
-		    //closes the socket
+
+			//closes the socket
 			btSocket.close();
 		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
-		
+
 		//disposes the closed socket
 		btSocket = null;
-	
+
 		try {
-		    
-		    //joins the other thread to the main thread
+
+			//joins the other thread to the main thread
 			mConnectedThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		//disposes the thread
 		mConnectedThread = null;
 	}
 
 
-    /**
-     * Sends data to the end device
-     * */
+	/**
+	 * Sends data to the end device
+	 * */
 	public void write(String data) {
 
-    
+
 		if(mConnectedThread.isAlive()) //error checking
 			mConnectedThread.write(data);
 
 	}
 
-    /**
-     * Self Explanatory
-     * @returns true if socket is available 
-     * */
+	/**
+	 * Self Explanatory
+	 * @returns true if socket is available 
+	 * */
 	public boolean isSocketAvailable() {
 		return btSocket.isConnected();
 	}
 
-    /**
-     * Creates an instance oF the bluetooth handler
-     * 
-     * */
+	/**
+	 * Creates an instance oF the bluetooth handler
+	 * 
+	 * */
 	public BluetoothHandler(Context c, String ad) {
 
-        //makes the ivs = to the parameters
+		//makes the ivs = to the parameters
 		address = ad;
 		btAdapter = BluetoothAdapter.getDefaultAdapter();	
-		 // get Bluetooth adapter
-	
-	    //checks bluetooth radio
+		// get Bluetooth adapter
+
+		//checks bluetooth radio
 		checkBTState();
-		
+
 		//creates handler to recieve the data
 		createHandler();
 
@@ -117,10 +119,10 @@ public class BluetoothHandler extends Activity {
 		BluetoothDevice device = btAdapter.getRemoteDevice(address);
 
 		try {
-		    
-		    //creates a bluetooth socket (connection) between this device and the other device
+
+			//creates a bluetooth socket (connection) between this device and the other device
 			btSocket = createBluetoothSocket(device);
-	
+
 		} catch (IOException e) {
 			errorExit("Fatal Error", "In onResume() and socket create failed: " + e.getMessage() + ".");
 		}
@@ -132,20 +134,20 @@ public class BluetoothHandler extends Activity {
 
 		// Establish the connection.  This will block until it connects.
 		Log.d(TAG, "...Connecting...");
-	
+
 		try {
-		    
-		    //waits here until it connects
+
+			//waits here until it connects
 			btSocket.connect();
 			Log.d(TAG, "....Connection ok...");
-	
-		} catch (IOException e) {
-	
-	    	try {
 
-                //if the exception is thrown then safely dispose of the socket if not done can cause memory leak
+		} catch (IOException e) {
+
+			try {
+
+				//if the exception is thrown then safely dispose of the socket if not done can cause memory leak
 				btSocket.close();
-		
+
 			} catch (IOException e2) {
 				errorExit("Fatal Error", "In onResume() and unable to close socket during connection failure" + e2.getMessage() + ".");
 			}
@@ -154,18 +156,18 @@ public class BluetoothHandler extends Activity {
 		// Create a data stream so we can talk to server.
 		Log.d(TAG, "...Create Socket...");
 
-        //creates a new thread that will handle all of the data transmission
+		//creates a new thread that will handle all of the data transmission
 		mConnectedThread = new ConnectedThread(btSocket);
-		
+
 		//starts the thread
 		mConnectedThread.start();
 
 	}
 
-    /**
-    * Creates an android handler that will send recieved messages to a target
-    * 
-     * */
+	/**
+	 * Creates an android handler that will send recieved messages to a target
+	 * 
+	 * */
 	private void createHandler(){
 		h = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -180,7 +182,6 @@ public class BluetoothHandler extends Activity {
 
 	}
 
-
 	/**
 	 * Called by the android system when user swtiches into a multitaking mode.
 	 * 
@@ -193,19 +194,19 @@ public class BluetoothHandler extends Activity {
 		Log.d(TAG, "...In onPause()...");
 
 		try  {
-		    
-		    //closes a socket
+
+			//closes a socket
 			btSocket.close();
-		
-		    
+
+
 		} catch (IOException e2) {
 			errorExit("Fatal Error", "In onPause() and failed to close socket." + e2.getMessage() + ".");
 		}
 	}
 
-    /**
-     * Checks the state of the bluetooth radio
-     * */
+	/**
+	 * Checks the state of the bluetooth radio
+	 * */
 	private void checkBTState() {
 
 		if(btAdapter==null) { 
@@ -215,82 +216,82 @@ public class BluetoothHandler extends Activity {
 				Log.d(TAG, "...Bluetooth ON...");
 			} else {
 
-                //callls native os intent (activity) that will ask user to turn on the bluetooth radio
+				//callls native os intent (activity) that will ask user to turn on the bluetooth radio
 				Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			
-			    //calls a background activity that will ask the user to turn on the bluetooth radio
+
+				//calls a background activity that will ask the user to turn on the bluetooth radio
 				startActivityForResult(enableBtIntent, 1);
 			}
 		}
 	}
 
-    //makes a toast error message and closes app
+	//makes a toast error message and closes app
 	private void errorExit(String title, String message){
 		Toast.makeText(getBaseContext(), title + " - " + message, Toast.LENGTH_LONG).show();
 		finish();
 	}
 
-    /**
-     * Creates a connection between 2 devices
-     * */
+	/**
+	 * Creates a connection between 2 devices
+	 * */
 	private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
 		if(Build.VERSION.SDK_INT >= 10){
 			try {
-				
+
 				//creates a native method to create an unencrypted socket 
 				final Method  m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", new Class[] { UUID.class });
-				
+
 				//wiill return the socket
 				return (BluetoothSocket) m.invoke(device, MY_UUID);
-		
+
 			} catch (Exception e) {
 				Log.e(TAG, "Could not create Insecure RFComm Connection",e);
 			}
 		}
-		
+
 		return  device.createRfcommSocketToServiceRecord(MY_UUID);
 	}
 
-    /**
-     * @author Rushad Antia
-     * 
-     * an inner class that will control low level in and output
-     * */
+	/**
+	 * @author Rushad Antia
+	 * 
+	 * an inner class that will control low level in and output
+	 * */
 	private class ConnectedThread extends Thread {
-	
-	    //2 ivs that hold elements for every connection in a socket
+
+		//2 ivs that hold elements for every connection in a socket
 		private final InputStream mmInStream;
 		private final OutputStream mmOutStream;
 
-        /**
-         * Creates an instance of the class and will break apart the socket into 
-         * and out in input stream
-         * */
+		/**
+		 * Creates an instance of the class and will break apart the socket into 
+		 * and out in input stream
+		 * */
 		public ConnectedThread(BluetoothSocket socket) {
 
-            //the reason we are using temporary steams is because if there is some exception throew whcih is not likely then we dont want the
-            //iv's directly referenceing somehting that is broken.
+			//the reason we are using temporary steams is because if there is some exception throew whcih is not likely then we dont want the
+			//iv's directly referenceing somehting that is broken.
 			InputStream tmpIn = null;
 			OutputStream tmpOut = null;
 
 			try {
-			    
-			    //gets the streams
+
+				//gets the streams
 				tmpIn = socket.getInputStream();
 				tmpOut = socket.getOutputStream();
-			
-			    
+
+
 			} catch (IOException e) { }
 
-            //makes iv's equal to the streams
+			//makes iv's equal to the streams
 			mmInStream = tmpIn;
 			mmOutStream = tmpOut;
 		}
 
-        /**
-         * Method that is inherited from the thread class
-         * basically whatever code is in here will be excecuted in a background thread
-         * */
+		/**
+		 * Method that is inherited from the thread class
+		 * basically whatever code is in here will be excecuted in a background thread
+		 * */
 		public void run() {
 			byte[] buffer = new byte[256];  // buffer store for the stream
 			int bytes; // bytes returned from read()
@@ -300,7 +301,7 @@ public class BluetoothHandler extends Activity {
 				try {
 					// Read from the InputStream
 					bytes = mmInStream.read(buffer);	
-					
+
 					//sends data from other device to the handler
 					h.obtainMessage(RECIEVE_MESSAGE, bytes, -1, buffer).sendToTarget();		
 				} catch (IOException e) {
@@ -310,19 +311,19 @@ public class BluetoothHandler extends Activity {
 		}
 
 		/* Call this from the main activity to send data to the remote device */
-	    /**
-	     * Will write the string to the other device
-	     * 
-	     * */
+		/**
+		 * Will write the string to the other device
+		 * 
+		 * */
 		public void write(String message) {
 			Log.d(TAG, "...Data to send: " + message + "...");
 			byte[] msgBuffer = message.getBytes();
 
 			try {
-			    
+
 				if(mmOutStream!=null)
 					mmOutStream.write(msgBuffer);
-					
+
 			} catch (IOException e) {
 				Log.d(TAG, "...Error data send: " + e.getMessage() + "...");     
 				Toast.makeText(getApplicationContext(), "Caught an exception while sending data", Toast.LENGTH_LONG).show();
@@ -333,7 +334,7 @@ public class BluetoothHandler extends Activity {
 
 	}
 
-    //disables the background press
+	//disables the background press
 	public void onBackPressed() {
 		//do nothing
 	}

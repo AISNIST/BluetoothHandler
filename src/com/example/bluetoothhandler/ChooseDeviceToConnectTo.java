@@ -1,11 +1,11 @@
 package com.example.bluetoothhandler;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,15 +29,38 @@ public class ChooseDeviceToConnectTo extends Activity {
 		setContentView(R.layout.activity_choose_device_to_connect_to);
 
 
-		ListView list = (ListView)findViewById(R.id.list);
 
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		final Set<BluetoothDevice> paired = mBluetoothAdapter.getBondedDevices();
 
+		if (mBluetoothAdapter.isEnabled()) {
+
+			doBTStuff();
+
+		} else {
+
+			//callls native os intent (activity) that will ask user to turn on the bluetooth radio
+			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+
+			//calls a background activity that will ask the user to turn on the bluetooth radio
+			startActivityForResult(enableBtIntent, 1);
+		}
+
+
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		 
+		super.onActivityResult(requestCode, resultCode, data);
+		doBTStuff();
+	}
+	
+	public void doBTStuff() {
+
+		ListView list = (ListView)findViewById(R.id.list);
 		ArrayList<String> s = new ArrayList<String>();
 		final ArrayList<String> ads = new ArrayList<String>();
 
-		for(BluetoothDevice d:paired) {
+		for(BluetoothDevice d:BluetoothAdapter.getDefaultAdapter().getBondedDevices()) {
 			ads.add(d.getAddress());
 			s.add(d.getName() + "\n" + d.getAddress());
 		}
