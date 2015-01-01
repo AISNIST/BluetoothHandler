@@ -42,7 +42,10 @@ public class BluetoothHandler extends Activity {
 	private ConnectedThread mConnectedThread;
 	private final int RECIEVE_MESSAGE =1;
 
+<<<<<<< HEAD
 	private String recievedMessage = " ";
+=======
+>>>>>>> origin/master
 
 	//MAC address to connect to 
 	private static String address;
@@ -78,13 +81,21 @@ public class BluetoothHandler extends Activity {
 		mConnectedThread = null;
 	}
 
+	/**
+	 * Sends data to the end device
+	 * */
+	protected void write(String data) {
 
+<<<<<<< HEAD
 	/**
 	 * Sends data to the end device
 	 * */
 	public void write(String data) {
 
 
+=======
+
+>>>>>>> origin/master
 		if(mConnectedThread.isAlive()) //error checking
 			mConnectedThread.write(data);
 
@@ -337,6 +348,116 @@ public class BluetoothHandler extends Activity {
 	//disables the background press
 	public void onBackPressed() {
 		//do nothing
+	}
+
+
+	/**ROBOT METHODS***/
+
+
+
+	/**
+	 * Robot moves forward for certain duration
+	 * @param duration in milliseconds
+	 */
+	public void moveForward(long duration){
+
+		this.write("3");
+		try {
+			Thread.sleep(duration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.write("1");
+	}
+
+	/**
+	 * Moves the robot forward indefinitely until you call stop
+	 */
+	public void moveForward(){
+		this.write("3");
+	}
+
+	/**
+	 * Stops all motion from the robot
+	 * 
+	 */
+	public void stop(){
+		this.write("1");
+	}
+
+	/**
+	 * Moves the robot backward for a certain duration
+	 * @param duration time to move backward in milliseconds
+	 */
+	public void moveBackward(long duration){
+
+		this.write("2");
+		try {
+			Thread.sleep(duration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.write("1");
+	}
+
+	/**
+	 * Moves the robot forward and to the left for a certain duration
+	 * @param duration time to move backward in milliseconds
+	 */
+	public void moveForwardToTheLeft(long duration){
+
+		this.write("5");
+		try {
+			Thread.sleep(duration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.write("1");
+	}
+
+	/**
+	 * Moves the robot forward and to the right for a certain duration
+	 * @param duration time to move backward in milliseconds
+	 */
+	public void moveForwardToTheRight(long duration){
+
+		this.write("4");
+		try {
+			Thread.sleep(duration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.write("1");
+	}
+
+	/**
+	 * Moves the robot backward and to the right for a certain duration
+	 * @param duration time to move backward in milliseconds
+	 */
+	public void moveBackwardToTheRight(long duration){
+
+		this.write("7");
+		try {
+			Thread.sleep(duration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.write("1");
+	}
+
+	/**
+	 * Moves the robot backward and to the right for a certain duration
+	 * @param duration time to move backward in milliseconds
+	 */
+	public void moveBackwardToTheLeft(long duration){
+
+		this.write("6");
+		try {
+			Thread.sleep(duration);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		this.write("1");
 	}
 
 }
