@@ -70,7 +70,7 @@ public class ChooseDeviceToConnectTo extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				MainActivity.robot = new BluetoothHandler(view.getContext(), ads.get((int) id));
+				MainActivity.robot = new BluetoothHandler(view.getContext(), ads.get((int) id)).bot;
 				finish();
 			}
 		});

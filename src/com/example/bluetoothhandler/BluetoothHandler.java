@@ -32,6 +32,10 @@ public class BluetoothHandler extends Activity {
 	//id necessary for making a bluetooth connection
 	private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
+	protected Robot bot;
+
+	private StringBuilder sb;
+
 	//an android tool that can properly recieve messages
 	private Handler h;
 
@@ -42,10 +46,9 @@ public class BluetoothHandler extends Activity {
 	private ConnectedThread mConnectedThread;
 	private final int RECIEVE_MESSAGE =1;
 
-<<<<<<< HEAD
-	private String recievedMessage = " ";
-=======
->>>>>>> origin/master
+	private BluetoothHandler context;
+
+	private String recievedMessage = "-1";
 
 	//MAC address to connect to 
 	private static String address;
@@ -84,18 +87,8 @@ public class BluetoothHandler extends Activity {
 	/**
 	 * Sends data to the end device
 	 * */
-	protected void write(String data) {
-
-<<<<<<< HEAD
-	/**
-	 * Sends data to the end device
-	 * */
 	public void write(String data) {
 
-
-=======
-
->>>>>>> origin/master
 		if(mConnectedThread.isAlive()) //error checking
 			mConnectedThread.write(data);
 
@@ -119,6 +112,8 @@ public class BluetoothHandler extends Activity {
 		address = ad;
 		btAdapter = BluetoothAdapter.getDefaultAdapter();	
 		// get Bluetooth adapter
+
+		sb = new StringBuilder();
 
 		//checks bluetooth radio
 		checkBTState();
@@ -172,7 +167,8 @@ public class BluetoothHandler extends Activity {
 
 		//starts the thread
 		mConnectedThread.start();
-
+		context = this;
+		bot = new Robot();
 	}
 
 	/**
@@ -183,14 +179,27 @@ public class BluetoothHandler extends Activity {
 		h = new Handler() {
 			public void handleMessage(android.os.Message msg) {
 				switch (msg.what) {
-				case RECIEVE_MESSAGE:												
+				case RECIEVE_MESSAGE:													// if receive massage
 
+					byte[] readBuf = (byte[]) msg.obj;
+					String strIncom = new String(readBuf, 0, msg.arg1);					// create string from bytes array
+					sb.append(strIncom);												// append string
+
+					int endOfLineIndex = sb.indexOf("\r\n");							// determine the end-of-line
+					if (endOfLineIndex > 0) { 											// if end-of-line,
+
+						String sbprint = sb.substring(0, endOfLineIndex);				// extract string
+						sb.delete(0, sb.length());										// and clear
+
+						System.out.println("Data: "+ sbprint);
+						recievedMessage = sbprint;
+
+					}
 					//Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
 					break;
 				}
 			};
 		};
-
 	}
 
 	/**
@@ -327,7 +336,7 @@ public class BluetoothHandler extends Activity {
 		 * 
 		 * */
 		public void write(String message) {
-			Log.d(TAG, "...Data to send: " + message + "...");
+			//Log.d(TAG, "...Data to send: " + message + "...");
 			byte[] msgBuffer = message.getBytes();
 
 			try {
@@ -353,111 +362,145 @@ public class BluetoothHandler extends Activity {
 
 	/**ROBOT METHODS***/
 
+	protected class Robot{
 
+		/**
+		 * Robot moves forward for certain duration
+		 * @param duration in milliseconds
+		 */
+		public void moveForward(long duration){
 
-	/**
-	 * Robot moves forward for certain duration
-	 * @param duration in milliseconds
-	 */
-	public void moveForward(long duration){
-
-		this.write("3");
-		try {
-			Thread.sleep(duration);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			this.write("3");
+			try {
+				Thread.sleep(duration);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.write("1");
 		}
-		this.write("1");
-	}
 
-	/**
-	 * Moves the robot forward indefinitely until you call stop
-	 */
-	public void moveForward(){
-		this.write("3");
-	}
-
-	/**
-	 * Stops all motion from the robot
-	 * 
-	 */
-	public void stop(){
-		this.write("1");
-	}
-
-	/**
-	 * Moves the robot backward for a certain duration
-	 * @param duration time to move backward in milliseconds
-	 */
-	public void moveBackward(long duration){
-
-		this.write("2");
-		try {
-			Thread.sleep(duration);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		/**
+		 * Moves the robot forward indefinitely until you call stop
+		 */
+		public void moveForward(){
+			this.write("3");
 		}
-		this.write("1");
-	}
 
-	/**
-	 * Moves the robot forward and to the left for a certain duration
-	 * @param duration time to move backward in milliseconds
-	 */
-	public void moveForwardToTheLeft(long duration){
-
-		this.write("5");
-		try {
-			Thread.sleep(duration);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		/**
+		 * Stops all motion from the robot
+		 * 
+		 */
+		public void stop(){
+			this.write("1");
 		}
-		this.write("1");
-	}
 
-	/**
-	 * Moves the robot forward and to the right for a certain duration
-	 * @param duration time to move backward in milliseconds
-	 */
-	public void moveForwardToTheRight(long duration){
+		/**
+		 * Moves the robot backward for a certain duration
+		 * @param duration time to move backward in milliseconds
+		 */
+		public void moveBackward(long duration){
 
-		this.write("4");
-		try {
-			Thread.sleep(duration);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			this.write("2");
+			try {
+				Thread.sleep(duration);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.write("1");
 		}
-		this.write("1");
-	}
 
-	/**
-	 * Moves the robot backward and to the right for a certain duration
-	 * @param duration time to move backward in milliseconds
-	 */
-	public void moveBackwardToTheRight(long duration){
+		/**
+		 * Moves the robot forward and to the left for a certain duration
+		 * @param duration time to move backward in milliseconds
+		 */
+		public void moveForwardToTheLeft(long duration){
 
-		this.write("7");
-		try {
-			Thread.sleep(duration);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			this.write("5");
+			try {
+				Thread.sleep(duration);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.write("1");
 		}
-		this.write("1");
-	}
 
-	/**
-	 * Moves the robot backward and to the right for a certain duration
-	 * @param duration time to move backward in milliseconds
-	 */
-	public void moveBackwardToTheLeft(long duration){
+		/**
+		 * Moves the robot forward and to the right for a certain duration
+		 * @param duration time to move backward in milliseconds
+		 */
+		public void moveForwardToTheRight(long duration){
 
-		this.write("6");
-		try {
-			Thread.sleep(duration);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			this.write("4");
+			try {
+				Thread.sleep(duration);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.write("1");
 		}
-		this.write("1");
-	}
 
+		/**
+		 * Moves the robot backward and to the right for a certain duration
+		 * @param duration time to move backward in milliseconds
+		 */
+		public void moveBackwardToTheRight(long duration){
+
+			this.write("7");
+			try {
+				Thread.sleep(duration);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.write("1");
+		}
+
+		/**
+		 * Moves the robot backward and to the right for a certain duration
+		 * @param duration time to move backward in milliseconds
+		 */
+		public void moveBackwardToTheLeft(long duration){
+
+			this.write("6");
+			try {
+				Thread.sleep(duration);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.write("1");
+		}
+
+		/**
+		 * Gets the ultrasonic sensor data
+		 * @return current sensor data in cm
+		 */
+		public int getUltrasonicSensorData() {
+
+			this.write("8");
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return Integer.parseInt(recievedMessage);
+		}
+
+		/**
+		 * 
+		 * @param value
+		 */
+		public void moveFrontServo(int value) {
+			this.write("f");
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				 
+				e.printStackTrace();
+			}
+			this.write(value+".");
+		}
+		
+		public void write(String d) {
+			context.write(d);
+		}
+	}
 }
