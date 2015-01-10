@@ -1,6 +1,5 @@
 package com.example.bluetoothhandler;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -48,7 +47,7 @@ public class BluetoothHandler extends Activity {
 
 	private BluetoothHandler context;
 
-	private String recievedMessage = "-1";
+	protected static String recievedMessage = "-1";
 
 	//MAC address to connect to 
 	private static String address;
@@ -192,6 +191,7 @@ public class BluetoothHandler extends Activity {
 						sb.delete(0, sb.length());										// and clear
 
 						System.out.println("Data: "+ sbprint);
+
 						recievedMessage = sbprint;
 
 					}
@@ -488,19 +488,31 @@ public class BluetoothHandler extends Activity {
 		 * 
 		 * @param value
 		 */
-		public void moveFrontServo(int value) {
-			this.write("f");
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				 
-				e.printStackTrace();
-			}
-			this.write(value+".");
+		public void moveFrontServo(int angle) {
+			if(angle<0||angle>180)		
+				throw new IllegalArgumentException();
+
+			this.write("f"+angle+"&");
+			
 		}
-		
+
+		/**Moves back servo
+		 *
+		 * @param angle - how much to mov3 by
+		 */
+		public void moveBackServo(int angle){
+			if(angle<0||angle>180)		
+				throw new IllegalArgumentException();
+
+			this.write("b"+angle+"&");
+		}
+
 		public void write(String d) {
 			context.write(d);
+		}
+
+		public String getRecievedMessage(){
+			return recievedMessage;
 		}
 	}
 }
