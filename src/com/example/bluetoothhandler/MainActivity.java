@@ -1,7 +1,5 @@
 package com.example.bluetoothhandler;
 
-import com.example.bluetoothhandler.BluetoothHandler.Robot;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -9,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import com.example.bluetoothhandler.BluetoothHandler.Robot;
 
 public class MainActivity extends Activity {
 
@@ -21,16 +21,24 @@ public class MainActivity extends Activity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		//startActivity(new Intent(getApplicationContext(), ChooseDeviceToConnectTo.class));
 		startActivityForResult(new Intent(getBaseContext(),ChooseDeviceToConnectTo.class),1);
+		addReconnectButton();
 
-		((Button)findViewById(R.id.button1)).setOnClickListener(new OnClickListener() {
-			
+
+
+	}
+
+	private void addReconnectButton() {
+		((Button)findViewById(R.id.reconnect)).setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
- 
-				robot.moveFrontServo(600);
+				BluetoothHandler handler = robot.getBTHandler("guy");
+				handler.dispose();
+				robot = null;
+				startActivity(new Intent(getApplicationContext(), ChooseDeviceToConnectTo.class));
 			}
-		} );
-		
+		});
+
 	}
- 
+
 }
