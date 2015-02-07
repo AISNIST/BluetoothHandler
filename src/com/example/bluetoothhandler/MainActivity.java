@@ -23,11 +23,47 @@ public class MainActivity extends Activity {
 		startActivityForResult(new Intent(getBaseContext(),ChooseDeviceToConnectTo.class),1);
 		addReconnectButton();
 
+<<<<<<< HEAD
 //WRITE CODE HERE
 		
 		
 		
 		
+=======
+ 
+ 		 
+		((Button)findViewById(R.id.c1)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+			 startActivity(new Intent(getApplicationContext(),Challenge1.class));
+			}
+		});
+		
+		((Button)findViewById(R.id.c2)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				 startActivity(new Intent(getApplicationContext(),Challenge2.class));
+			}
+		});
+		
+		((Button)findViewById(R.id.c3)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				 startActivity(new Intent(getApplicationContext(),Challenge3.class));
+			}
+		});
+		
+		((Button)findViewById(R.id.c4)).setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				 startActivity(new Intent(getApplicationContext(),Challenge4.class));
+			}
+		});
+>>>>>>> origin/master
 
 	}
 
@@ -42,7 +78,10 @@ public class MainActivity extends Activity {
 				startActivity(new Intent(getApplicationContext(), ChooseDeviceToConnectTo.class));
 			}
 		});
+ 
+
 
 	}
 
+	 
 }

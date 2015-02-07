@@ -1,5 +1,6 @@
 package com.example.bluetoothhandler;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,6 +38,8 @@ public class BluetoothHandler extends Activity {
 
 	//an android tool that can properly recieve messages
 	private Handler h;
+
+	public static final int SENSOR_DATA_ERROR = -1;
 
 	//bluetooth adapter
 	private BluetoothAdapter btAdapter = null;
@@ -86,7 +89,7 @@ public class BluetoothHandler extends Activity {
 	/**
 	 * Sends data to the end device
 	 * */
-	public void write(String data) {
+	public synchronized void write(String data) {
 
 		if(mConnectedThread.isAlive()) //error checking
 			mConnectedThread.write(data);
@@ -480,14 +483,20 @@ public class BluetoothHandler extends Activity {
 		 * @return current sensor data in cm
 		 */
 		public int getUltrasonicSensorData() {
-
+			int i = 0;
 			this.write("8");
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			return Integer.parseInt(recievedMessage);
+			try{
+				i =  Integer.parseInt(recievedMessage);
+			}catch(NumberFormatException e){
+				return context.SENSOR_DATA_ERROR;
+			}
+
+			return i;
 		}
 
 		/**
@@ -499,7 +508,7 @@ public class BluetoothHandler extends Activity {
 				throw new IllegalArgumentException();
 
 			this.write("f"+angle+"&");
-			
+
 		}
 
 		/**Moves back servo
@@ -521,9 +530,17 @@ public class BluetoothHandler extends Activity {
 			return recievedMessage;
 		}
 
+<<<<<<< HEAD
 		public BluetoothHandler getBTHandler() {
 			// TODO Auto-generated method stub
 			return context;
+=======
+		public BluetoothHandler getBTHandler(String password){
+			if(password.equals("guy")){
+				return context;
+			}
+			else return null;
+>>>>>>> origin/master
 		}
 	}
 }

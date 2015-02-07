@@ -8,6 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.bluetoothhandler.MainActivity" >
 
+
     <Button
         android:id="@+id/reconnect"
         android:layout_width="wrap_content"
@@ -15,5 +16,41 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:text="Reconnect" />
+
+    <Button
+        android:id="@+id/c1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:text="Challenge 1" />
+
+    <Button
+        android:id="@+id/c2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/c1"
+        android:layout_centerHorizontal="true"
+        android:text="Challenge 2" />
+
+    <Button
+        android:id="@+id/c3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/c2"
+        android:layout_centerHorizontal="true"
+        android:text="Challenge 3" />
+
+    <Button
+        android:id="@+id/c4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/c3"
+        android:layout_centerHorizontal="true"
+        android:text="Challenge 4" />
+ 
+ 
+
 
 </RelativeLayout>
