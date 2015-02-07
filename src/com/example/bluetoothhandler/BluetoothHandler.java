@@ -39,6 +39,8 @@ public class BluetoothHandler extends Activity {
 	//an android tool that can properly recieve messages
 	private Handler h;
 
+	public static final int SENSOR_DATA_ERROR = -1;
+
 	//bluetooth adapter
 	private BluetoothAdapter btAdapter = null;
 	private BluetoothSocket btSocket = null;
@@ -87,7 +89,7 @@ public class BluetoothHandler extends Activity {
 	/**
 	 * Sends data to the end device
 	 * */
-	public void write(String data) {
+	public synchronized void write(String data) {
 
 		if(mConnectedThread.isAlive()) //error checking
 			mConnectedThread.write(data);
@@ -475,14 +477,20 @@ public class BluetoothHandler extends Activity {
 		 * @return current sensor data in cm
 		 */
 		public int getUltrasonicSensorData() {
-
+			int i = 0;
 			this.write("8");
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			return Integer.parseInt(recievedMessage);
+			try{
+				i =  Integer.parseInt(recievedMessage);
+			}catch(NumberFormatException e){
+				return context.SENSOR_DATA_ERROR;
+			}
+
+			return i;
 		}
 
 		/**

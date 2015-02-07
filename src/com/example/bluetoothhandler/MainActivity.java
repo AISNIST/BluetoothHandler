@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
 		addReconnectButton();
 
  
-		 
+ 		 
 		((Button)findViewById(R.id.c1)).setOnClickListener(new OnClickListener() {
 
 			@Override
