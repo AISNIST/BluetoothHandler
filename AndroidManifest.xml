@@ -29,6 +29,22 @@
             android:name=".ChooseDeviceToConnectTo"
             android:label="@string/title_activity_choose_device_to_connect_to" >
         </activity>
+        <activity
+            android:name=".Challenge1"
+            android:label="@string/title_activity_challenge1" >
+        </activity>
+        <activity
+            android:name=".Challenge2"
+            android:label="@string/title_activity_challenge2" >
+        </activity>
+        <activity
+            android:name=".Challenge3"
+            android:label="@string/title_activity_challenge3" >
+        </activity>
+        <activity
+            android:name=".Challenge4"
+            android:label="@string/title_activity_challenge4" >
+        </activity>
     </application>
 
 </manifest>
