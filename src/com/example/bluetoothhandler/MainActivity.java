@@ -23,7 +23,11 @@ public class MainActivity extends Activity {
 		startActivityForResult(new Intent(getBaseContext(),ChooseDeviceToConnectTo.class),1);
 		addReconnectButton();
 
-
+//WRITE CODE HERE
+		
+		
+		
+		
 
 	}
 
@@ -32,7 +36,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				BluetoothHandler handler = robot.getBTHandler("guy");
+				BluetoothHandler handler = robot.getBTHandler();
 				handler.dispose();
 				robot = null;
 				startActivity(new Intent(getApplicationContext(), ChooseDeviceToConnectTo.class));

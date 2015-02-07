@@ -167,7 +167,7 @@ public class BluetoothHandler extends Activity {
 		//starts the thread
 		mConnectedThread.start();
 		context = this;
-		bot = new Robot();
+		bot = new Robot(this);
 	}
 
 	/**
@@ -364,6 +364,12 @@ public class BluetoothHandler extends Activity {
 
 	protected class Robot{
 
+		private BluetoothHandler context;
+		
+		public Robot(BluetoothHandler bluetoothHandler) {
+			this.context = bluetoothHandler;
+		}
+
 		/**
 		 * Robot moves forward for certain duration
 		 * @param duration in milliseconds
@@ -513,6 +519,11 @@ public class BluetoothHandler extends Activity {
 
 		public String getRecievedMessage(){
 			return recievedMessage;
+		}
+
+		public BluetoothHandler getBTHandler() {
+			// TODO Auto-generated method stub
+			return context;
 		}
 	}
 }
