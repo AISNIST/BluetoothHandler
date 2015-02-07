@@ -494,7 +494,7 @@ public class BluetoothHandler extends Activity {
 				throw new IllegalArgumentException();
 
 			this.write("f"+angle+"&");
- 
+
 		}
 
 		/**Moves back servo

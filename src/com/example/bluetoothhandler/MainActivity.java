@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
 		startActivityForResult(new Intent(getBaseContext(),ChooseDeviceToConnectTo.class),1);
 		addReconnectButton();
 
+ 
 		 
 		((Button)findViewById(R.id.c1)).setOnClickListener(new OnClickListener() {
 
@@ -69,7 +70,11 @@ public class MainActivity extends Activity {
 				startActivity(new Intent(getApplicationContext(), ChooseDeviceToConnectTo.class));
 			}
 		});
+ 
+
 
 	}
+
+	 
 
 }
