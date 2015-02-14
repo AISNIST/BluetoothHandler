@@ -8,7 +8,6 @@ import com.example.bluetoothhandler.BluetoothHandler.Robot;
 public abstract class Challenge extends Activity {
 	
 	public Robot robot;
-	public static final int SENSOR_DATA_ERROR = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

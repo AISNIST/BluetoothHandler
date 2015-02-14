@@ -19,12 +19,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		//startActivity(new Intent(getApplicationContext(), ChooseDeviceToConnectTo.class));
-		startActivityForResult(new Intent(getBaseContext(),ChooseDeviceToConnectTo.class),1);
+		startActivity(new Intent(getApplicationContext(), ChooseDeviceToConnectTo.class));
+		//startActivityForResult(new Intent(getBaseContext(),ChooseDeviceToConnectTo.class),1);
 		addReconnectButton();
-
- 
- 
  		 
 		((Button)findViewById(R.id.c1)).setOnClickListener(new OnClickListener() {
 
@@ -66,7 +63,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				BluetoothHandler handler = robot.getBTHandler();
+				BluetoothHandler handler = robot.getBTHandler("guy");
 				handler.dispose();
 				robot = null;
 				startActivity(new Intent(getApplicationContext(), ChooseDeviceToConnectTo.class));

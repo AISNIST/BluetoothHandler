@@ -368,7 +368,7 @@ public class BluetoothHandler extends Activity {
 	protected class Robot{
 
 		private BluetoothHandler context;
-		
+
 		public Robot(BluetoothHandler bluetoothHandler) {
 			this.context = bluetoothHandler;
 		}
@@ -391,7 +391,7 @@ public class BluetoothHandler extends Activity {
 		/**
 		 * Moves the robot forward indefinitely until you call stop
 		 */
-		public void moveForward(){
+		public void forward(){
 			this.write("3");
 		}
 
@@ -522,25 +522,16 @@ public class BluetoothHandler extends Activity {
 			this.write("b"+angle+"&");
 		}
 
-		public void write(String d) {
+		private void write(String d) {
 			context.write(d);
 		}
 
-		public String getRecievedMessage(){
-			return recievedMessage;
-		}
-
-<<<<<<< HEAD
-		public BluetoothHandler getBTHandler() {
-			// TODO Auto-generated method stub
-			return context;
-=======
 		public BluetoothHandler getBTHandler(String password){
 			if(password.equals("guy")){
 				return context;
 			}
 			else return null;
->>>>>>> origin/master
+
 		}
 	}
 }
